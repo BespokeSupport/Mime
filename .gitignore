@@ -1,0 +1,12 @@
+# IDEs
+/.idea/
+
+# Composer
+/vendor/
+/composer.phar
+
+# generated files
+/src/FileMimes.php
+/build/
+/resources/*
+!resources/.gitkeep

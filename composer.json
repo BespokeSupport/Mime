@@ -1,0 +1,22 @@
+{
+  "name": "bespoke-support/mime",
+  "description": "Mime Tools (Reverse Lookup)",
+  "keywords": ["mime","file extension","extension"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Richard Seymour",
+      "email": "web@bespoke.support"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "BespokeSupport\\Mime\\": "src"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump" : [
+      "BespokeSupport\\Mime\\FileMimesGenerator::composerGenerate"
+    ]
+  }
+}
