@@ -15,8 +15,7 @@
     }
   },
   "scripts": {
-    "post-autoload-dump" : [
-      "BespokeSupport\\Mime\\FileMimesGenerator::composerGenerate"
-    ]
+    "post-update-cmd": ["BespokeSupport\\Mime\\FileMimesGenerator::composerGenerate"],
+    "post-install-cmd": ["BespokeSupport\\Mime\\FileMimesGenerator::composerGenerate"]
   }
 }
