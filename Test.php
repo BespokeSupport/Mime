@@ -71,4 +71,16 @@ class MimeTests extends PHPUnit_Framework_TestCase
         $this->assertNotNull($mimeReturn);
         $this->assertNotEquals($mimeReturn,$mime);
     }
+
+    public function testExtensionFail()
+    {
+        $mime = 'application/foobar';
+        $extension = 'FOOBARBAR';
+        $mimes = new \BespokeSupport\Mime\FileMimes();
+        $mimeReturn = $mimes->getMimeFromExtension($extension);
+        $this->assertNull($mimeReturn);
+        $this->assertNotEquals($mimeReturn,$mime);
+    }
+
+
 }
