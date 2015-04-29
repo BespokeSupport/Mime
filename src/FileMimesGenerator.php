@@ -21,9 +21,11 @@ class FileMimesGenerator
 	 * @static
 	 * @param \Composer\Script\Event $event
 	 */
-	public static function composerGenerate($event)
+	public static function composerGenerate($event = null)
 	{
-		$event->getIO()->write('Generating BespokeSupport\Mime\FileMimes class');
+        if ($event) {
+            $event->getIO()->write('Generating BespokeSupport\Mime\FileMimes class');
+        }
 
         $file = dirname(__FILE__).'/../resources/mimes.csv';
 
@@ -32,6 +34,11 @@ class FileMimesGenerator
 		self::generate($file);
 	}
 
+    /**
+     * Convert HTML page to CSV then create Mime listings
+     *
+     * @param $file
+     */
     public static function fetch($file)
     {
         $url = 'http://www.freeformatter.com/mime-types-list.html';
@@ -78,11 +85,11 @@ class FileMimesGenerator
                 $extension = (count($extensions)) ? trim(array_pop($extensions)) : $extText;
 
                 fputcsv($filePointerCsv,
-                    array(
+                    [
                         $nodeMime->textContent,
                         $nodeName->textContent,
                         $extension
-                    ),
+                    ],
                     ',',
                     '"'
                 );
@@ -94,6 +101,11 @@ class FileMimesGenerator
         fclose($filePointerCsv);
     }
 
+    /**
+     * Generate FileMimes class
+     *
+     * @param $file
+     */
 	public static function generate($file)
 	{
         $filePointer = fopen($file, 'r');
@@ -103,6 +115,7 @@ class FileMimesGenerator
 
 		$header = true;
 		while (($row = fgetcsv($filePointer))) {
+
 			if ($header) {
 				$header = false;
 				continue;
@@ -239,6 +252,18 @@ EOF;
 
 		return '';
 	}
+
+    /**
+     * @param null \$extension
+     * @return string|null
+     */
+    public function getMimeFromExtension(\$extension = null)
+    {
+        if (\$extension && (\$extension = array_search(\$extension, \$this->mimes))) {
+            return \$extension;
+        }
+        return null;
+    }
 
 	/**
 	 * @return array

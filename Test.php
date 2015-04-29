@@ -53,10 +53,22 @@ class MimeTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($ext, 'Atom Syndication Format');
     }
 
+    public function testMimeAtom()
+    {
+        $mime = 'application/atom+xml';
+        $extension = 'xml';
+        $mimes = new \BespokeSupport\Mime\FileMimes();
+        $mimeReturn = $mimes->getMimeFromExtension($extension);
+        $this->assertEquals($mime, $mimeReturn);
+    }
 
-
-
-
-
-
+    public function testMimeDocFail()
+    {
+        $mime = 'application/atom+xml';
+        $extension = 'docx';
+        $mimes = new \BespokeSupport\Mime\FileMimes();
+        $mimeReturn = $mimes->getMimeFromExtension($extension);
+        $this->assertNotNull($mimeReturn);
+        $this->assertNotEquals($mimeReturn,$mime);
+    }
 }

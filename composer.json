@@ -14,8 +14,10 @@
       "BespokeSupport\\Mime\\": "src"
     }
   },
+  "require":{
+    "ext-libxml" : "*"
+  },
   "scripts": {
-    "post-update-cmd": ["BespokeSupport\\Mime\\FileMimesGenerator::composerGenerate"],
-    "post-install-cmd": ["BespokeSupport\\Mime\\FileMimesGenerator::composerGenerate"]
+    "post-autoload-dump": ["BespokeSupport\\Mime\\FileMimesGenerator::composerGenerate"]
   }
 }
