@@ -85,11 +85,11 @@ class FileMimesGenerator
                 $extension = (count($extensions)) ? trim(array_pop($extensions)) : $extText;
 
                 fputcsv($filePointerCsv,
-                    [
+                    array(
                         $nodeMime->textContent,
                         $nodeName->textContent,
                         $extension
-                    ],
+                    ),
                     ',',
                     '"'
                 );
