@@ -69,7 +69,7 @@ class MimeTests extends PHPUnit_Framework_TestCase
         $mimes = new \BespokeSupport\Mime\FileMimes();
         $mimeReturn = $mimes->getMimeFromExtension($extension);
         $this->assertNotNull($mimeReturn);
-        $this->assertNotEquals($mimeReturn,$mime);
+        $this->assertNotEquals($mimeReturn, $mime);
     }
 
     public function testExtensionFail()
@@ -79,8 +79,6 @@ class MimeTests extends PHPUnit_Framework_TestCase
         $mimes = new \BespokeSupport\Mime\FileMimes();
         $mimeReturn = $mimes->getMimeFromExtension($extension);
         $this->assertNull($mimeReturn);
-        $this->assertNotEquals($mimeReturn,$mime);
+        $this->assertNotEquals($mimeReturn, $mime);
     }
-
-
 }
