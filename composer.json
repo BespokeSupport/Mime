@@ -15,7 +15,8 @@
     }
   },
   "require":{
-    "ext-libxml" : "*"
+    "ext-libxml" : "*",
+    "ext-dom" : "*"
   },
   "scripts": {
     "post-autoload-dump": ["BespokeSupport\\Mime\\FileMimesGenerator::composerGenerate"]

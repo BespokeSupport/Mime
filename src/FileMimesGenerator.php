@@ -12,6 +12,9 @@
 
 namespace BespokeSupport\Mime;
 
+use DOMDocument;
+use Exception;
+
 /**
  * Class FileMimesGenerator.
  */
@@ -28,7 +31,7 @@ class FileMimesGenerator
             $event->getIO()->write('Generating BespokeSupport\Mime\FileMimes class');
         }
 
-        $file = dirname(__FILE__).'/../resources/mimes.csv';
+        $file = __DIR__ . '/../resources/mimes.csv';
 
         self::fetch($file);
 
@@ -49,8 +52,8 @@ class FileMimesGenerator
             return;
         }
 
-        $filePointerCsv = fopen($file, 'w');
-        $fileHtml = dirname(dirname(__FILE__)).'/resources/mimes.html';
+        $filePointerCsv = fopen($file, 'wb');
+        $fileHtml = \dirname(__FILE__, 2) . '/resources/mimes.html';
 
         if (!file_exists($fileHtml)) {
             $contents = file_get_contents($url);
@@ -64,7 +67,7 @@ class FileMimesGenerator
         $contents = preg_replace('/<\/tbody>.*/is', '', $contents);
 
         try {
-            $xml = new \DOMDocument();
+            $xml = new DOMDocument();
 
             @$xml->loadHTML($contents);
 
@@ -79,11 +82,11 @@ class FileMimesGenerator
                 $nodeMime = $tds->item(2);
                 $nodeFile = $tds->item(4);
 
-                $extText = ($nodeFile->textContent == 'N/A') ? null : str_replace('.', '', $nodeFile->textContent);
+                $extText = ($nodeFile->textContent === 'N/A') ? null : str_replace('.', '', $nodeFile->textContent);
 
                 $extensions = explode(',', $extText);
 
-                $extension = (count($extensions)) ? trim(array_pop($extensions)) : $extText;
+                $extension = \count($extensions) ? trim(array_pop($extensions)) : $extText;
 
                 fputcsv($filePointerCsv,
                     [
@@ -95,7 +98,7 @@ class FileMimesGenerator
                     '"'
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         fclose($filePointerCsv);
@@ -108,7 +111,7 @@ class FileMimesGenerator
      */
     public static function generate($file)
     {
-        $filePointer = fopen($file, 'r');
+        $filePointer = fopen($file, 'rb');
 
         $names = '';
         $extensions = '';
@@ -139,9 +142,12 @@ class FileMimesGenerator
         $class .= self::getPropertyNamesFooter();
         $class .= self::getFooter();
 
-        file_put_contents(dirname(__FILE__).'/FileMimes.php', $class);
+        file_put_contents(__DIR__ . '/FileMimes.php', $class);
     }
 
+    /**
+     * @return string
+     */
     private static function getHeader()
     {
         return <<< EOF
@@ -168,6 +174,9 @@ class FileMimes
 EOF;
     }
 
+    /**
+     * @return string
+     */
     private static function getFooter()
     {
         return <<< 'EOF'
@@ -177,72 +186,105 @@ EOF;
 EOF;
     }
 
+    /**
+     * @return string
+     */
     private static function getPropertyMimesHeader()
     {
         return <<< 'EOF'
 
-	/**
-	 * @var array
-	 */
-	protected $mimes = array(
+    /**
+     * @var array
+     */
+    protected $mimes = array(
 
 EOF;
     }
 
+    /**
+     * @return string
+     */
     private static function getPropertyMimesFooter()
     {
         return <<< 'EOF'
-	);
+    );
 EOF;
     }
 
+    /**
+     * @return string
+     */
     private static function getPropertyNamesHeader()
     {
         return <<< 'EOF'
 
-	/**
-	 * @var array
-	 */
-	protected $names = array(
+    /**
+     * @var array
+     */
+    protected $names = array(
 
 EOF;
     }
 
+    /**
+     * @return string
+     */
     private static function getPropertyNamesFooter()
     {
         return <<< 'EOF'
-	);
+    );
 EOF;
     }
 
+    /**
+     * @return string
+     */
     private static function getFunctions()
     {
         return <<< 'EOB'
-	/**
-	 * @param null|string $mime
-	 * @return string
-	 */
-	public function getExtensionFromMime($mime = null)
-	{
-		if ($mime && array_key_exists($mime, $this->mimes)) {
-			return $this->mimes[$mime];
-		}
+    /**
+     * @return string
+     */
+    public static function read($file)
+    {
+        $fInfoClass = new \finfo(FILEINFO_MIME_TYPE | FILEINFO_PRESERVE_ATIME);
+        return $fInfoClass->buffer(file_get_contents((string)$file));
+    }
 
-		return '';
-	}
+    /**
+     * @return string
+     */
+    public static function extension($file)
+    {
+        $spl = new \SplFileInfo($file);
+        return $spl->isFile() ? $spl->getExtension() : null;
+    }
 
-	/**
-	 * @param null $mime
-	 * @return string
-	 */
-	public function getNameFromMime($mime = null)
-	{
-		if ($mime && array_key_exists($mime, $this->names)) {
-			return $this->names[$mime];
-		}
+    /**
+     * @param null|string $mime
+     * @return string
+     */
+    public function getExtensionFromMime($mime = null)
+    {
+        if ($mime && array_key_exists($mime, $this->mimes)) {
+            return $this->mimes[$mime];
+        }
 
-		return '';
-	}
+        return '';
+    }
+
+    /**
+     * @param null $mime
+     * @return string
+     */
+    public function getNameFromMime($mime = null)
+    {
+        if ($mime && array_key_exists($mime, $this->names)) {
+            return $this->names[$mime];
+        }
+
+        return '';
+    }
 
     /**
      * @param null $extension
@@ -256,21 +298,21 @@ EOF;
         return null;
     }
 
-	/**
-	 * @return array
-	 */
-	public function getMimes()
-	{
-		return $this->mimes;
-	}
+    /**
+     * @return array
+     */
+    public function getMimes()
+    {
+        return $this->mimes;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getMimeNames()
-	{
-		return $this->names;
-	}
+    /**
+     * @return array
+     */
+    public function getMimeNames()
+    {
+        return $this->names;
+    }
 EOB;
     }
 }

@@ -4,6 +4,7 @@
 # Composer
 /vendor/
 /composer.phar
+/composer.lock
 
 # generated files
 /src/FileMimes.php
