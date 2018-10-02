@@ -16,6 +16,7 @@
   },
   "require":{
     "ext-libxml" : "*",
+    "ext-fileinfo" : "*",
     "ext-dom" : "*"
   },
   "scripts": {

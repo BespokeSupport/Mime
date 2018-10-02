@@ -243,11 +243,19 @@ EOF;
     {
         return <<< 'EOB'
     /**
+     * @param $file
      * @return string
      */
     public static function read($file)
     {
+        $path = (string)$file;
+
+        if (!is_file($path) || !is_readable($path)) {
+            return null;
+        }
+
         $fInfoClass = new \finfo(FILEINFO_MIME_TYPE | FILEINFO_PRESERVE_ATIME);
+
         return $fInfoClass->buffer(file_get_contents((string)$file));
     }
 
