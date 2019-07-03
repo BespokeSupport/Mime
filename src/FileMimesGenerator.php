@@ -196,7 +196,7 @@ EOF;
     /**
      * @var array
      */
-    protected $mimes = array(
+    protected static $mimes = array(
 
 EOF;
     }
@@ -221,7 +221,7 @@ EOF;
     /**
      * @var array
      */
-    protected $names = array(
+    protected static $names = array(
 
 EOF;
     }
@@ -272,10 +272,10 @@ EOF;
      * @param null|string $mime
      * @return string
      */
-    public function getExtensionFromMime($mime = null)
+    public static function getExtensionFromMime($mime = null)
     {
-        if ($mime && array_key_exists($mime, $this->mimes)) {
-            return $this->mimes[$mime];
+        if ($mime && array_key_exists($mime, self::$mimes)) {
+            return self::$mimes[$mime];
         }
 
         return '';
@@ -285,10 +285,10 @@ EOF;
      * @param null $mime
      * @return string
      */
-    public function getNameFromMime($mime = null)
+    public static function getNameFromMime($mime = null)
     {
-        if ($mime && array_key_exists($mime, $this->names)) {
-            return $this->names[$mime];
+        if ($mime && array_key_exists($mime, self::$names)) {
+            return self::$names[$mime];
         }
 
         return '';
@@ -298,9 +298,9 @@ EOF;
      * @param null $extension
      * @return string|null
      */
-    public function getMimeFromExtension($extension = null)
+    public static function getMimeFromExtension($extension = null)
     {
-        if ($extension && ($extension = array_search($extension, $this->mimes))) {
+        if ($extension && ($extension = array_search($extension, self::$mimes))) {
             return $extension;
         }
         return null;
@@ -309,17 +309,17 @@ EOF;
     /**
      * @return array
      */
-    public function getMimes()
+    public static function getMimes()
     {
-        return $this->mimes;
+        return self::$mimes;
     }
 
     /**
      * @return array
      */
-    public function getMimeNames()
+    public static function getMimeNames()
     {
-        return $this->names;
+        return self::$names;
     }
 EOB;
     }
